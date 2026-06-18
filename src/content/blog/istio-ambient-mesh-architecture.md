@@ -61,7 +61,7 @@ Cơ chế hoạt động từng bước:
 1. **Pod gửi request** đến Pod C — không cần biết Istio tồn tại
 2. **iptables intercept** (do Istio CNI cấu hình) chuyển hướng traffic sang Ztunnel local
 3. **Ztunnel Node 1** verify workload identity, enforce L4 policy, bật mTLS
-4. Dùng **HBONE protocol** (HTTP/2 over TLS) tạo encrypted tunnel sang Node 2
+4. Dùng **HBONE protocol** (HTTP CONNECT tunnel trên HTTP/2 + mTLS, port 15008) tạo encrypted tunnel sang Node 2
 5. **Ztunnel Node 2** nhận và deliver traffic đến Pod C
 
 **Benchmark từ Istio 1.24**: ở 1.000 req/s, một ztunnel chỉ dùng ~0.06 vCPU và 12 MB RAM — giảm 3x so với sidecar.
@@ -139,11 +139,13 @@ Với cluster **10.000 pod / 50 namespace / 100 node**:
 | Memory | baseline | giảm ~90% |
 | Restart pod khi upgrade | ✗ Cần | ✅ Không cần |
 
+> **Lưu ý về cách tính:** Đây là con số *ước lượng minh hoạ*, không phải benchmark đo thực. Giả định: mỗi sidecar Envoy chiếm ~0.1 vCPU (10.000 sidecar → ~1.000 vCPU); ztunnel ~0.06 vCPU ở 1.000 req/s, scale theo tải nên dải 20–74 vCPU phản ánh khoảng từ cluster nhàn rỗi đến cluster tải cao. Con số tiết kiệm ~$430K/năm tính theo đơn giá on-demand vCPU của instance EC2 nhóm `c`/`m` ở `ap-southeast-1`. Chi phí thực tế phụ thuộc loại instance, mức commit (Savings Plan/RI) và tỷ lệ service cần waypoint — hãy thay số liệu của chính cluster bạn vào.
+
 ---
 
 ## Sidecar còn cần không trong 2026?
 
-Trước 2025, sidecar là lựa chọn duy nhất. Từ 2026 trở đi, **Ambient là default**. Chỉ chuyển sang sidecar nếu bạn có yêu cầu kỹ thuật đặc thù mà Ambient chưa đáp ứng được.
+Trước 2025, sidecar là lựa chọn duy nhất. Từ 2026, **Ambient là lựa chọn được khuyến nghị cho mọi cluster mới (greenfield)** — đơn giản hơn khi vận hành, nhẹ tài nguyên hơn, và là hướng đi chính của dự án. Lưu ý: profile cài đặt *mặc định* của Istio hiện vẫn là sidecar-based; bạn cần bật ambient một cách tường minh. Chỉ giữ/chọn sidecar nếu bạn có yêu cầu kỹ thuật đặc thù mà Ambient chưa đáp ứng được.
 
 Nếu bạn đang vận hành Istio với sidecar và chưa có kế hoạch migration — đây là thời điểm tốt để bắt đầu đánh giá.
 
