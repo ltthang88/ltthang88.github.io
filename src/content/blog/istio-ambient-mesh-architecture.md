@@ -143,6 +143,76 @@ Với cluster **10.000 pod / 50 namespace / 100 node**:
 
 ---
 
+## Đánh đổi & hạn chế cần biết
+
+Ambient không phải "bữa trưa miễn phí". Trước khi migrate, hãy cân nhắc:
+
+- **Debug khó hơn vì HBONE.** Traffic east-west được bọc trong HBONE tunnel (mTLS, port 15008). `tcpdump` trên dây chỉ thấy gói đã mã hoá, không thấy HTTP của ứng dụng. Bạn buộc phải dựa vào `istioctl zc workloads/services`, ztunnel access log và config dump — khác hẳn thói quen debug sidecar. Thêm nữa, một ztunnel phục vụ **mọi pod trên node**, nên log của nó trộn lẫn traffic của nhiều workload, khó cô lập.
+
+- **Mô hình shared-node giảm mức cô lập so với sidecar.** Với sidecar, mỗi proxy chỉ giữ identity/khoá mTLS của *đúng một* workload — blast radius khi một proxy bị xâm nhập là tối thiểu. Với ambient, ztunnel là tiến trình per-node xử lý traffic và identity cho **tất cả** pod trên node đó; nếu ztunnel bị compromise, phạm vi ảnh hưởng rộng hơn. Trong môi trường multi-tenant đòi hỏi cô lập mạnh, đây là điểm cần đánh giá kỹ.
+
+- **L7 cần thêm một hop.** Ztunnel chỉ làm L4. Khi cần policy L7 chi tiết, traffic phải vòng qua waypoint (hai HBONE tunnel) — thêm latency và thêm một thành phần phải vận hành/scale.
+
+- **Vài mảng còn đang hoàn thiện.** Multicluster ở chế độ ambient vẫn đang trưởng thành; một số use case `EnvoyFilter`/WASM quen dùng ở sidecar chưa được hỗ trợ tương đương. Nếu mesh hiện tại của bạn phụ thuộc nặng vào các tính năng này, hãy kiểm tra parity trước.
+
+---
+
+## Thử nghiệm nhanh: bật ambient & waypoint
+
+Lý thuyết là đủ — phần hay là bạn có thể thử ngay trên một cluster test (kind/minikube) chỉ với vài lệnh.
+
+**1. Cài Istio kèm ambient profile:**
+
+```bash
+istioctl install --set profile=ambient --skip-confirmation
+```
+
+**2. Thêm namespace vào mesh — chỉ cần một label, không restart pod:**
+
+```bash
+kubectl label namespace bookinfo istio.io/dataplane-mode=ambient
+```
+
+Ngay lập tức mọi pod trong `bookinfo` đã có mTLS + L4 authz qua ztunnel. Kiểm tra ztunnel "nhìn thấy" workload nào:
+
+```bash
+istioctl ztunnel-config workloads
+```
+
+**3. Cần L7 (HTTP routing, retries, traffic split)? Tạo một Waypoint:**
+
+```bash
+istioctl waypoint apply -n bookinfo --enroll-namespace
+```
+
+Hoặc khai báo tường minh qua Gateway API:
+
+```yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: waypoint
+  namespace: bookinfo
+  labels:
+    istio.io/waypoint-for: service
+spec:
+  gatewayClassName: istio-waypoint
+  listeners:
+    - name: mesh
+      port: 15008
+      protocol: HBONE
+```
+
+**4. Trỏ một service đi qua waypoint:**
+
+```bash
+kubectl label service reviews -n bookinfo istio.io/use-waypoint=waypoint
+```
+
+Xong. Phần lớn workload chỉ cần bước 1–2 (L4 free); waypoint chỉ bật ở nơi thực sự cần L7.
+
+---
+
 ## Sidecar còn cần không trong 2026?
 
 Trước 2025, sidecar là lựa chọn duy nhất. Từ 2026, **Ambient là lựa chọn được khuyến nghị cho mọi cluster mới (greenfield)** — đơn giản hơn khi vận hành, nhẹ tài nguyên hơn, và là hướng đi chính của dự án. Lưu ý: profile cài đặt *mặc định* của Istio hiện vẫn là sidecar-based; bạn cần bật ambient một cách tường minh. Chỉ giữ/chọn sidecar nếu bạn có yêu cầu kỹ thuật đặc thù mà Ambient chưa đáp ứng được.
