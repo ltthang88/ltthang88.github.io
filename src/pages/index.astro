@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { CATEGORIES, categoryToSlug, CATEGORY_COLORS } from '../lib/categories';
+
+const PAGE_SIZE = 10;
+
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const totalPages = Math.max(1, Math.ceil(allPosts.length / PAGE_SIZE));
+const posts = allPosts.slice(0, PAGE_SIZE);
+
+// Per-category counts for the stat cards
+const counts = Object.fromEntries(
+  CATEGORIES.map((cat) => [cat, allPosts.filter((p) => p.data.category === cat).length])
+);
+---
+
+<Base title="ltthang88">
+  <div class="page-container">
+    <!-- Hero -->
+    <section style="margin-bottom:3rem">
+      <h1 class="page-title">ltthang88</h1>
+      <p class="page-subtitle">
+        Notes về Kubernetes, CI/CD, Databases, Networking và hành trình Career trong ngành tech.
+      </p>
+
+      <!-- Category quick-links -->
+      <div style="display:flex;flex-wrap:wrap;gap:.625rem">
+        {CATEGORIES.map((cat) => (
+          <a
+            href={`/category/${categoryToSlug(cat)}/`}
+            style={`
+              display:inline-flex;align-items:center;gap:.4rem;
+              padding:.25rem .875rem;border-radius:9999px;
+              font-size:.8125rem;font-weight:600;color:#fff;
+              background:${CATEGORY_COLORS[cat]};
+              text-decoration:none;opacity:.9;
+              transition:opacity .15s;
+            `}
+            onmouseover="this.style.opacity=1"
+            onmouseout="this.style.opacity=.9"
+          >
+            {cat}
+            <span style="opacity:.8;font-weight:400">{counts[cat]}</span>
+          </a>
+        ))}
+        <a href="/search/" style="
+          display:inline-flex;align-items:center;gap:.4rem;
+          padding:.25rem .875rem;border-radius:9999px;
+          font-size:.8125rem;font-weight:500;
+          border:1px solid var(--border);color:var(--text-muted);
+          text-decoration:none;transition:border-color .15s,color .15s;
+        ">
+          🔍 Search
+        </a>
+      </div>
+    </section>
+
+    <!-- Post list -->
+    <section>
+      <h2 style="font-size:1rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.25rem">
+        Bài mới nhất
+      </h2>
+
+      {posts.length > 0
+        ? (
+          <div class="post-grid">
+            {posts.map((post) => <PostCard post={post} />)}
+          </div>
+        )
+        : <p style="color:var(--text-muted)">Chưa có bài viết nào. Hãy thêm file .md vào <code>src/content/blog/</code>!</p>
+      }
+
+      <Pagination currentPage={1} lastPage={totalPages} urlBase="" />
+    </section>
+  </div>
+</Base>

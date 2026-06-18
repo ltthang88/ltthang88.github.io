@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import TagBadge from './TagBadge.astro';
+import { categoryToSlug, CATEGORY_COLORS } from '../lib/categories';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+const { post } = Astro.props;
+const { title, description, pubDate, category, tags } = post.data;
+
+const date = pubDate.toLocaleDateString('vi-VN', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+const categoryColor = CATEGORY_COLORS[category];
+---
+
+<article class="post-card">
+  <div class="post-card-meta">
+    <a
+      href={`/category/${categoryToSlug(category)}/`}
+      class="category-badge"
+      style={`background:${categoryColor}`}
+    >
+      {category}
+    </a>
+    <time datetime={pubDate.toISOString()}>{date}</time>
+  </div>
+
+  <h2 class="post-card-title">
+    <a href={`/blog/${post.slug}/`}>{title}</a>
+  </h2>
+
+  <p class="post-card-desc">{description}</p>
+
+  {tags.length > 0 && (
+    <div class="post-card-tags">
+      {tags.map((tag) => <TagBadge tag={tag} />)}
+    </div>
+  )}
+</article>

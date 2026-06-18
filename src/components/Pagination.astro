@@ -1,0 +1,49 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  urlBase: string; // e.g. "/category/kubernetes"
+}
+
+const { currentPage, lastPage, urlBase } = Astro.props;
+
+function pageUrl(n: number) {
+  if (n === 1) return `${urlBase}/`;
+  return `${urlBase}/${n}/`;
+}
+
+// Generate page numbers with ellipsis
+function pages() {
+  if (lastPage <= 7) return Array.from({ length: lastPage }, (_, i) => i + 1);
+  const near = new Set([1, 2, lastPage - 1, lastPage, currentPage - 1, currentPage, currentPage + 1].filter(n => n >= 1 && n <= lastPage));
+  const sorted = [...near].sort((a, b) => a - b);
+  const result: (number | '…')[] = [];
+  for (let i = 0; i < sorted.length; i++) {
+    if (i > 0 && sorted[i] - sorted[i - 1] > 1) result.push('…');
+    result.push(sorted[i]);
+  }
+  return result;
+}
+---
+
+{lastPage > 1 && (
+  <nav class="pagination" aria-label="Pagination">
+    {currentPage > 1
+      ? <a href={pageUrl(currentPage - 1)} aria-label="Previous">‹</a>
+      : <span class="disabled" aria-hidden="true">‹</span>
+    }
+
+    {pages().map((p) =>
+      p === '…'
+        ? <span aria-hidden="true">…</span>
+        : p === currentPage
+          ? <span class="current" aria-current="page">{p}</span>
+          : <a href={pageUrl(p as number)}>{p}</a>
+    )}
+
+    {currentPage < lastPage
+      ? <a href={pageUrl(currentPage + 1)} aria-label="Next">›</a>
+      : <span class="disabled" aria-hidden="true">›</span>
+    }
+  </nav>
+)}

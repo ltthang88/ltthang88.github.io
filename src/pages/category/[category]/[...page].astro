@@ -1,0 +1,75 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { CATEGORIES, categoryToSlug, slugToCategory, CATEGORY_COLORS } from '../../../lib/categories';
+
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return CATEGORIES.flatMap((category) => {
+    const posts = allPosts
+      .filter((p) => p.data.category === category)
+      .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+    return paginate(posts, {
+      params: { category: categoryToSlug(category) },
+      props: { categoryName: category },
+      pageSize: 10,
+    });
+  });
+}
+
+interface Props {
+  page: {
+    data: Awaited<ReturnType<typeof getCollection<'blog'>>>;
+    currentPage: number;
+    lastPage: number;
+    total: number;
+  };
+  categoryName: string;
+}
+
+const { page, categoryName } = Astro.props;
+const { category } = Astro.params;
+const categoryColor = CATEGORY_COLORS[categoryName];
+const urlBase = `/category/${category}`;
+---
+
+<Base
+  title={`${categoryName} · trang ${page.currentPage}`}
+  description={`Bài viết về ${categoryName} — trang ${page.currentPage} / ${page.lastPage}`}
+>
+  <div class="page-container">
+    <div class="category-header">
+      <h1 class="page-title">
+        <span
+          class="category-badge"
+          style={`background:${categoryColor};font-size:1.1rem;padding:.2rem .75rem`}
+        >
+          {categoryName}
+        </span>
+      </h1>
+      <span class="post-count-label">
+        {page.total} bài viết
+        {page.lastPage > 1 && ` · trang ${page.currentPage}/${page.lastPage}`}
+      </span>
+    </div>
+
+    {page.data.length > 0
+      ? (
+        <div class="post-grid">
+          {page.data.map((post) => <PostCard post={post} />)}
+        </div>
+      )
+      : <p style="color:var(--text-muted)">Chưa có bài viết nào trong category này.</p>
+    }
+
+    <Pagination
+      currentPage={page.currentPage}
+      lastPage={page.lastPage}
+      urlBase={urlBase}
+    />
+  </div>
+</Base>

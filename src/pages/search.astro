@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Search" description="Tìm kiếm bài viết trên blog">
+  <div class="content-container">
+    <div class="search-wrap">
+      <h1 class="page-title">Search</h1>
+      <div id="search"></div>
+    </div>
+  </div>
+</Base>
+
+<!--
+  Pagefind UI is injected at build time by `npx pagefind --site dist`.
+  The CSS is already loaded in Base.astro.
+  This script initialises the search widget after the bundle is available.
+-->
+<script>
+  // Pagefind UI script is served from /pagefind/pagefind-ui.js after build.
+  // We load it dynamically so `astro dev` doesn't throw 404s.
+  async function initSearch() {
+    const script = document.createElement('script');
+    script.src = '/pagefind/pagefind-ui.js';
+    script.onload = () => {
+      // @ts-ignore
+      new window.PagefindUI({
+        element: '#search',
+        showSubResults: true,
+        resetStyles: false,
+      });
+    };
+    document.head.appendChild(script);
+  }
+  initSearch();
+</script>
+
+<style>
+  /* Pagefind overrides to match the blog's CSS variables */
+  :root {
+    --pagefind-ui-scale: 0.95;
+    --pagefind-ui-primary: var(--primary);
+    --pagefind-ui-text: var(--text);
+    --pagefind-ui-background: var(--bg-soft);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-tag: var(--tag-bg);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 0.5rem;
+    --pagefind-ui-font: inherit;
+  }
+</style>

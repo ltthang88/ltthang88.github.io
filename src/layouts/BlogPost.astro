@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Base from './Base.astro';
+import TagBadge from '../components/TagBadge.astro';
+import { categoryToSlug, CATEGORY_COLORS } from '../lib/categories';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags } = post.data;
+
+const date = pubDate.toLocaleDateString('vi-VN', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const updated = updatedDate
+  ? updatedDate.toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' })
+  : null;
+
+const categoryColor = CATEGORY_COLORS[category];
+---
+
+<Base title={title} description={description}>
+  <div class="content-container">
+    <header class="post-header">
+      <h1 class="post-header-title" data-pagefind-body>{title}</h1>
+      <div class="post-header-meta">
+        <a
+          href={`/category/${categoryToSlug(category)}/`}
+          class="category-badge"
+          style={`background:${categoryColor}`}
+        >
+          {category}
+        </a>
+        <time datetime={pubDate.toISOString()}>{date}</time>
+        {updated && <span>· Updated: {updated}</span>}
+      </div>
+      {tags.length > 0 && (
+        <div class="post-header-tags">
+          {tags.map((tag) => <TagBadge tag={tag} />)}
+        </div>
+      )}
+    </header>
+
+    <article class="prose" data-pagefind-body>
+      <slot />
+    </article>
+
+    <hr style="margin-top:3rem;border:none;border-top:1px solid var(--border)" />
+    <p style="margin-top:1.25rem;font-size:.875rem;color:var(--text-muted)">
+      <a href={`/category/${categoryToSlug(category)}/`}>← Tất cả bài về {category}</a>
+    </p>
+  </div>
+</Base>
