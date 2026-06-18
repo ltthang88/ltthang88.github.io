@@ -1,0 +1,71 @@
+<svg viewBox="0 0 720 310" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5z" fill="#374151"/></marker>
+    <marker id="arrg" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5z" fill="#22c55e"/></marker>
+    <marker id="arrp" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5z" fill="#7c3aed"/></marker>
+  </defs>
+
+  <rect width="720" height="310" fill="#f8fafc" rx="10"/>
+  <text x="360" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Ztunnel — Traffic Flow (Step by Step)</text>
+
+  <!-- Step bubbles row -->
+  <!-- 1 Pod sends request -->
+  <circle cx="60" cy="75" r="20" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+  <text x="60" y="71" text-anchor="middle" font-size="10" font-weight="700" fill="#1d4ed8">①</text>
+  <text x="60" y="83" text-anchor="middle" font-size="8" fill="#1d4ed8">Pod</text>
+  <text x="60" y="104" text-anchor="middle" font-size="9" fill="#475569">Pod A gửi</text>
+  <text x="60" y="116" text-anchor="middle" font-size="9" fill="#475569">request tới Pod C</text>
+
+  <!-- arrow 1→2 -->
+  <line x1="85" y1="75" x2="148" y2="75" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 2 iptables -->
+  <rect x="150" y="54" width="86" height="42" fill="#fef9c3" stroke="#fde047" stroke-width="2" rx="6"/>
+  <text x="193" y="72" text-anchor="middle" font-size="9" font-weight="700" fill="#713f12">② iptables</text>
+  <text x="193" y="85" text-anchor="middle" font-size="8" fill="#92400e">CNI redirect</text>
+  <text x="193" y="117" text-anchor="middle" font-size="9" fill="#475569">Traffic bị bắt</text>
+  <text x="193" y="129" text-anchor="middle" font-size="9" fill="#475569">chuyển hướng</text>
+
+  <!-- arrow 2→3 -->
+  <line x1="236" y1="75" x2="298" y2="75" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 3 Ztunnel src -->
+  <rect x="300" y="46" width="100" height="58" fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="6"/>
+  <text x="350" y="68" text-anchor="middle" font-size="10" font-weight="700" fill="#15803d">③ Ztunnel</text>
+  <text x="350" y="82" text-anchor="middle" font-size="9" fill="#166534">Node 1</text>
+  <text x="350" y="93" text-anchor="middle" font-size="8" fill="#166534">mTLS + identity</text>
+  <text x="350" y="117" text-anchor="middle" font-size="9" fill="#475569">Verify identity,</text>
+  <text x="350" y="129" text-anchor="middle" font-size="9" fill="#475569">enforce L4 policy</text>
+
+  <!-- arrow 3→4 HBONE -->
+  <line x1="400" y1="75" x2="458" y2="75" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#arrp)"/>
+
+  <!-- 4 HBONE tunnel -->
+  <rect x="460" y="54" width="96" height="42" fill="#ede9fe" stroke="#a78bfa" stroke-width="2" rx="6"/>
+  <text x="508" y="72" text-anchor="middle" font-size="9" font-weight="700" fill="#5b21b6">④ HBONE</text>
+  <text x="508" y="85" text-anchor="middle" font-size="8" fill="#6d28d9">Encrypted tunnel</text>
+  <text x="508" y="117" text-anchor="middle" font-size="9" fill="#475569">HTTP/2 over TLS</text>
+  <text x="508" y="129" text-anchor="middle" font-size="9" fill="#475569">between nodes</text>
+
+  <!-- arrow 4→5 -->
+  <line x1="556" y1="75" x2="614" y2="75" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- 5 Ztunnel dst -->
+  <rect x="616" y="46" width="90" height="58" fill="#dcfce7" stroke="#22c55e" stroke-width="2" rx="6"/>
+  <text x="661" y="68" text-anchor="middle" font-size="10" font-weight="700" fill="#15803d">⑤ Ztunnel</text>
+  <text x="661" y="82" text-anchor="middle" font-size="9" fill="#166534">Node 2</text>
+  <text x="661" y="93" text-anchor="middle" font-size="8" fill="#166534">deliver to pod</text>
+
+  <!-- Pod C below ztunnel 2 -->
+  <line x1="661" y1="104" x2="661" y2="148" stroke="#374151" stroke-width="1.5" marker-end="url(#arr)"/>
+  <rect x="616" y="150" width="90" height="42" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5" rx="6"/>
+  <text x="661" y="169" text-anchor="middle" font-size="10" font-weight="600" fill="#1d4ed8">Pod C</text>
+  <text x="661" y="182" text-anchor="middle" font-size="9" fill="#3b82f6">receives request</text>
+
+  <!-- ─── Notes section ─── -->
+  <rect x="20" y="208" width="680" height="84" fill="#fff" stroke="#e2e8f0" stroke-width="1" rx="6"/>
+  <text x="36" y="228" font-size="10" font-weight="700" fill="#0f172a">Key points:</text>
+  <text x="36" y="246" font-size="10" fill="#475569">• Pod không biết proxy tồn tại — Istio CNI dùng iptables để redirect transparently</text>
+  <text x="36" y="262" font-size="10" fill="#475569">• HBONE = HTTP-Based Overlay Network Environment — HTTP/2 tunnel có mTLS, giúp carry workload identity</text>
+  <text x="36" y="278" font-size="10" fill="#475569">• Ztunnel chỉ xử lý L3/L4. Không parse HTTP header, không biết URL path, không retry logic</text>
+</svg>
