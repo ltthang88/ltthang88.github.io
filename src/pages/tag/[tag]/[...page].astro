@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PostCard from '../../../components/PostCard.astro';
+import Pagination from '../../../components/Pagination.astro';
+import { tagToSlug } from '../../../lib/tags';
+
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+  // Map each tag slug → { displayName, posts }
+  const tagMap = new Map<string, { name: string; posts: typeof allPosts }>();
+
+  for (const post of allPosts) {
+    for (const tag of post.data.tags) {
+      const slug = tagToSlug(tag);
+      if (!tagMap.has(slug)) tagMap.set(slug, { name: tag, posts: [] });
+      tagMap.get(slug)!.posts.push(post);
+    }
+  }
+
+  return [...tagMap.entries()].flatMap(([slug, { name, posts }]) => {
+    const sorted = posts.sort(
+      (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+    );
+
+    return paginate(sorted, {
+      params: { tag: slug },
+      props: { tagName: name },
+      pageSize: 10,
+    });
+  });
+}
+
+interface Props {
+  page: {
+    data: Awaited<ReturnType<typeof getCollection<'blog'>>>;
+    currentPage: number;
+    lastPage: number;
+    total: number;
+  };
+  tagName: string;
+}
+
+const { page, tagName } = Astro.props;
+const { tag } = Astro.params;
+const urlBase = `/tag/${tag}`;
+---
+
+<Base
+  title={`#${tagName} · trang ${page.currentPage}`}
+  description={`Bài viết được gắn tag #${tagName} — trang ${page.currentPage} / ${page.lastPage}`}
+>
+  <div class="page-container">
+    <div class="category-header">
+      <h1 class="page-title">
+        <span class="tag" style="font-size:1.1rem;padding:.2rem .75rem">#{tagName}</span>
+      </h1>
+      <span class="post-count-label">
+        {page.total} bài viết
+        {page.lastPage > 1 && ` · trang ${page.currentPage}/${page.lastPage}`}
+      </span>
+    </div>
+
+    {page.data.length > 0
+      ? (
+        <div class="post-grid">
+          {page.data.map((post) => <PostCard post={post} />)}
+        </div>
+      )
+      : <p style="color:var(--text-muted)">Chưa có bài viết nào với tag này.</p>
+    }
+
+    <Pagination
+      currentPage={page.currentPage}
+      lastPage={page.lastPage}
+      urlBase={urlBase}
+    />
+  </div>
+</Base>

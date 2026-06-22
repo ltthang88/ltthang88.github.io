@@ -37,6 +37,9 @@ const currentPath = Astro.url.pathname;
           );
         })
       }
+      <li>
+        <a href="/tags/" class={currentPath.startsWith('/tag') ? 'active' : ''}>Tags</a>
+      </li>
     </ul>
 
     <div class="nav-right">

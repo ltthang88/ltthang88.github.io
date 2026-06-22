@@ -1,7 +1,9 @@
 ---
+import { tagToSlug } from '../lib/tags';
+
 interface Props {
   tag: string;
 }
 const { tag } = Astro.props;
 ---
-<span class="tag">#{tag}</span>
+<a class="tag" href={`/tag/${tagToSlug(tag)}/`}>#{tag}</a>

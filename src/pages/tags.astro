@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { tagToSlug } from '../lib/tags';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+// Aggregate tags → { name, count }
+const tagMap = new Map<string, { name: string; count: number }>();
+for (const post of allPosts) {
+  for (const tag of post.data.tags) {
+    const slug = tagToSlug(tag);
+    if (!tagMap.has(slug)) tagMap.set(slug, { name: tag, count: 0 });
+    tagMap.get(slug)!.count++;
+  }
+}
+
+// Sort: most posts first, then alphabetically
+const tags = [...tagMap.entries()]
+  .map(([slug, { name, count }]) => ({ slug, name, count }))
+  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+---
+
+<Base title="Tags" description={`Tất cả ${tags.length} tag trên blog ltthang88.`}>
+  <div class="page-container">
+    <section style="margin-bottom:2rem">
+      <h1 class="page-title">Tags</h1>
+      <p class="page-subtitle">
+        {tags.length} tag · click vào một tag để xem các bài liên quan.
+      </p>
+    </section>
+
+    {tags.length > 0
+      ? (
+        <div style="display:flex;flex-wrap:wrap;gap:.625rem">
+          {tags.map((t) => (
+            <a class="tag" href={`/tag/${t.slug}/`} style="font-size:.875rem;padding:.25rem .75rem">
+              #{t.name}
+              <span style="opacity:.7;font-weight:400">{t.count}</span>
+            </a>
+          ))}
+        </div>
+      )
+      : <p style="color:var(--text-muted)">Chưa có tag nào.</p>
+    }
+  </div>
+</Base>
