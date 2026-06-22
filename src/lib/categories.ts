@@ -1,7 +1,6 @@
 export const CATEGORIES = [
   'Kubernetes',
   'CI/CD',
-  'Databases',
   'Networking',
   'Career',
   'Security',
@@ -25,7 +24,6 @@ export function slugToCategory(slug: string): Category | undefined {
 export const CATEGORY_COLORS: Record<Category, string> = {
   Kubernetes: '#326ce5',
   'CI/CD': '#f97316',
-  Databases: '#16a34a',
   Networking: '#7c3aed',
   Career: '#db2777',
   Security: '#dc2626',
