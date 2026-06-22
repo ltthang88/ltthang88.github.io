@@ -23,6 +23,19 @@ const siteTitle = title === 'ltthang88' ? title : `${title} · ltthang88`;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Set theme before paint to avoid flash -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme');
+          if (t === 'dark' || t === 'light') {
+            document.documentElement.setAttribute('data-theme', t);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
     <link rel="canonical" href={canonicalURL} />
     <meta name="description" content={description} />
 
