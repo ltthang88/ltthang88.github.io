@@ -1,0 +1,35 @@
+<svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+  <defs>
+    <marker id="b" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5z" fill="#2563eb"/></marker>
+  </defs>
+  <rect width="720" height="300" fill="#f8fafc" rx="10"/>
+  <text x="360" y="30" text-anchor="middle" font-size="14" font-weight="700" fill="#0f172a">Control Loop — pattern lặp lại ở mọi object Kubernetes</text>
+
+  <!-- Desired state -->
+  <rect x="40" y="70" width="170" height="70" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="8"/>
+  <text x="125" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">Desired state</text>
+  <text x="125" y="120" text-anchor="middle" font-size="9.5" fill="#1e40af">YAML bạn khai báo</text>
+
+  <!-- Controller -->
+  <rect x="275" y="70" width="170" height="70" fill="#ede9fe" stroke="#7c3aed" stroke-width="2" rx="8"/>
+  <text x="360" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">Controller</text>
+  <text x="360" y="114" text-anchor="middle" font-size="9.5" fill="#5b21b6">so sánh &amp; reconcile</text>
+  <text x="360" y="130" text-anchor="middle" font-size="9.5" fill="#5b21b6">tác động khi lệch</text>
+
+  <!-- Actual state -->
+  <rect x="510" y="70" width="170" height="70" fill="#dcfce7" stroke="#16a34a" stroke-width="2" rx="8"/>
+  <text x="595" y="100" text-anchor="middle" font-size="12" font-weight="700" fill="#15803d">Actual state</text>
+  <text x="595" y="120" text-anchor="middle" font-size="9.5" fill="#166534">cluster thực tế</text>
+
+  <!-- arrows -->
+  <line x1="210" y1="95" x2="271" y2="95" stroke="#2563eb" stroke-width="2" marker-end="url(#b)"/>
+  <line x1="445" y1="95" x2="506" y2="95" stroke="#2563eb" stroke-width="2" marker-end="url(#b)"/>
+
+  <!-- feedback loop arrow back -->
+  <path d="M595,140 L595,200 L125,200 L125,144" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#b)"/>
+  <text x="360" y="194" text-anchor="middle" font-size="10" fill="#2563eb" font-weight="600">watch: actual ≠ desired → lặp lại vòng đến khi khớp</text>
+
+  <rect x="40" y="232" width="640" height="44" fill="#1e293b" rx="6"/>
+  <text x="360" y="252" text-anchor="middle" font-size="10.5" fill="#e2e8f0">Deployment, ReplicaSet, StatefulSet, Job... đều theo đúng vòng này.</text>
+  <text x="360" y="268" text-anchor="middle" font-size="10.5" font-weight="700" fill="#7ee787">Thấy được pattern này → hệ thống thôi giống "phép thuật".</text>
+</svg>

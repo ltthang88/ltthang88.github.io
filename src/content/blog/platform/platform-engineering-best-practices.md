@@ -1,7 +1,7 @@
 ---
 title: "15 Best Practice Platform Engineering (kèm tình huống minh họa)"
 description: "Xây platform nội bộ không đảm bảo thành công — phần lớn thất bại vì không khớp cách developer làm việc. Bài này phân tích 15 best practice platform engineering, mỗi mục kèm một tình huống minh họa cụ thể."
-pubDate: 2026-06-22
+pubDate: 2026-06-22T10:30:00+07:00
 category: Platform
 tags: ["platform-engineering", "devex", "idp", "golden-paths", "devops", "finops"]
 ---

@@ -12,7 +12,7 @@
   --tag-text: #2a2a28;
   --nav-bg: #fcfcfbcc;
   --max-w: 72rem;
-  --content-w: 50rem;
+  --content-w: 58rem;
   --radius: 0.25rem;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, 'SF Mono', Menlo, monospace;
 }
@@ -344,8 +344,15 @@ h6 {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 0.7; }
-  50%       { opacity: 0; }
+
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0;
+  }
 }
 
 .hero-rule {
@@ -588,6 +595,7 @@ a.tag:hover {
 
 /* Shiki dual-theme support */
 .astro-code {
+  position: relative;
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
   margin: 1.5rem 0;
@@ -596,6 +604,48 @@ a.tag:hover {
   font-size: 0.875rem;
   line-height: 1.65;
   border: 1px solid var(--border);
+}
+
+/* Copy-code button */
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.astro-code:hover .copy-btn,
+.copy-btn:focus-visible {
+  opacity: 1;
+}
+
+.copy-btn:hover {
+  color: var(--text);
+  border-color: var(--primary);
+}
+
+.copy-btn.copied {
+  opacity: 1;
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Always show on touch devices (no hover) */
+@media (hover: none) {
+  .copy-btn {
+    opacity: 1;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -809,4 +859,34 @@ footer {
   .content-container {
     padding: 2rem 1rem;
   }
+}
+
+/* ─── Image lightbox ───────────────────────────────────────────────────── */
+.prose img {
+  cursor: zoom-in;
+}
+
+.img-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.85);
+  cursor: zoom-out;
+}
+
+.img-lightbox.open {
+  display: flex;
+}
+
+.img-lightbox img {
+  max-width: 95vw;
+  max-height: 95vh;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }

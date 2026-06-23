@@ -1,0 +1,60 @@
+<svg viewBox="0 0 720 380" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+  <rect width="720" height="380" fill="#f8fafc" rx="10"/>
+  <text x="360" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Điểm xuất phát: Hạ tầng truyền thống vs PaaS</text>
+
+  <!-- LEFT: traditional bottom-up -->
+  <rect x="20" y="44" width="330" height="312" fill="#fff1f2" stroke="#fca5a5" stroke-width="1.5" rx="8"/>
+  <text x="185" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#991b1b">❌ Truyền thống — xây từ dưới lên</text>
+
+  <!-- app at top (appears last) -->
+  <rect x="48" y="80" width="274" height="30" fill="#fecaca" stroke="#f87171" stroke-width="1" rx="4"/>
+  <text x="185" y="99" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">Application — xuất hiện SAU CÙNG</text>
+
+  <rect x="48" y="116" width="274" height="26" fill="#fff" stroke="#fca5a5" stroke-width="1" rx="4"/>
+  <text x="185" y="133" text-anchor="middle" font-size="9.5" fill="#b91c1c">Monitoring</text>
+  <rect x="48" y="146" width="274" height="26" fill="#fff" stroke="#fca5a5" stroke-width="1" rx="4"/>
+  <text x="185" y="163" text-anchor="middle" font-size="9.5" fill="#b91c1c">Deploy / CI-CD</text>
+  <rect x="48" y="176" width="274" height="26" fill="#fff" stroke="#fca5a5" stroke-width="1" rx="4"/>
+  <text x="185" y="193" text-anchor="middle" font-size="9.5" fill="#b91c1c">Networking</text>
+  <rect x="48" y="206" width="274" height="26" fill="#fff" stroke="#fca5a5" stroke-width="1" rx="4"/>
+  <text x="185" y="223" text-anchor="middle" font-size="9.5" fill="#b91c1c">Operating System</text>
+
+  <!-- start here at bottom -->
+  <rect x="48" y="236" width="274" height="30" fill="#fee2e2" stroke="#dc2626" stroke-width="2" rx="4"/>
+  <text x="185" y="255" text-anchor="middle" font-size="10" font-weight="700" fill="#991b1b">▶ Bắt đầu ở đây: Server</text>
+
+  <text x="185" y="292" text-anchor="middle" font-size="10" fill="#b91c1c">Hàng tuần trôi qua trước khi</text>
+  <text x="185" y="307" text-anchor="middle" font-size="10" fill="#b91c1c">khách hàng thấy được gì</text>
+  <rect x="100" y="320" width="170" height="26" fill="#dc2626" rx="5"/>
+  <text x="185" y="338" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">⏳ Time-to-value: tuần</text>
+
+  <!-- RIGHT: PaaS top-down -->
+  <rect x="370" y="44" width="330" height="312" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" rx="8"/>
+  <text x="535" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#15803d">✅ PaaS — bắt đầu từ sản phẩm</text>
+
+  <!-- start here: app/business at top -->
+  <rect x="398" y="80" width="274" height="44" fill="#dcfce7" stroke="#16a34a" stroke-width="2" rx="4"/>
+  <text x="535" y="100" text-anchor="middle" font-size="10.5" font-weight="700" fill="#15803d">▶ Bắt đầu ở đây</text>
+  <text x="535" y="116" text-anchor="middle" font-size="9.5" fill="#166534">Application + mục tiêu kinh doanh</text>
+
+  <!-- platform absorbs everything -->
+  <rect x="398" y="134" width="274" height="132" fill="#fff" stroke="#86efac" stroke-width="1.5" rx="6"/>
+  <text x="535" y="153" text-anchor="middle" font-size="10.5" font-weight="700" fill="#15803d">Platform hấp thụ vận hành</text>
+  <rect x="412" y="162" width="118" height="24" fill="#dcfce7" stroke="#86efac" rx="3"/>
+  <text x="471" y="178" text-anchor="middle" font-size="8.5" fill="#166534">CI/CD pipeline</text>
+  <rect x="540" y="162" width="118" height="24" fill="#dcfce7" stroke="#86efac" rx="3"/>
+  <text x="599" y="178" text-anchor="middle" font-size="8.5" fill="#166534">Database</text>
+  <rect x="412" y="192" width="118" height="24" fill="#dcfce7" stroke="#86efac" rx="3"/>
+  <text x="471" y="208" text-anchor="middle" font-size="8.5" fill="#166534">Observability</text>
+  <rect x="540" y="192" width="118" height="24" fill="#dcfce7" stroke="#86efac" rx="3"/>
+  <text x="599" y="208" text-anchor="middle" font-size="8.5" fill="#166534">Security</text>
+  <rect x="412" y="222" width="118" height="24" fill="#dcfce7" stroke="#86efac" rx="3"/>
+  <text x="471" y="238" text-anchor="middle" font-size="8.5" fill="#166534">Scaling</text>
+  <rect x="540" y="222" width="118" height="24" fill="#dcfce7" stroke="#86efac" rx="3"/>
+  <text x="599" y="238" text-anchor="middle" font-size="8.5" fill="#166534">Chuẩn vận hành</text>
+
+  <text x="535" y="300" text-anchor="middle" font-size="10" fill="#166534">Project bắt đầu gần</text>
+  <text x="535" y="315" text-anchor="middle" font-size="10" fill="#166534">giá trị khách hàng</text>
+  <rect x="450" y="320" width="170" height="26" fill="#16a34a" rx="5"/>
+  <text x="535" y="338" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">⚡ Time-to-value: giờ</text>
+</svg>

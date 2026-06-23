@@ -1,7 +1,7 @@
 ---
 title: "Engineering Metrics cho người mới bắt đầu"
 description: "Story Points để đánh giá năng suất, lines of code để đo hiệu quả — ngành này lạm dụng metrics quá nhiều. Bài này dựng một framework đơn giản: bắt đầu từ 'tại sao', đo sức khỏe delivery pipeline, độ bền vận hành, và khả năng observability của sản phẩm — kèm tình huống minh họa cụ thể."
-pubDate: 2026-06-22
+pubDate: 2026-06-22T13:00:00+07:00
 category: Observability
 tags: ["metrics", "dora", "observability", "sre", "engineering-leadership", "devops"]
 ---

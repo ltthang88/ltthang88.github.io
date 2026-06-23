@@ -1,0 +1,34 @@
+<svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+  <defs>
+    <marker id="ar" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#2563eb"/></marker>
+  </defs>
+  <rect width="720" height="330" fill="#f8fafc" rx="10"/>
+  <text x="360" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#0f172a">Platform team là đòn bẩy — làm 1 lần, mọi đội hưởng lợi</text>
+
+  <!-- platform team center-left -->
+  <rect x="40" y="120" width="180" height="90" fill="#dbeafe" stroke="#2563eb" stroke-width="2" rx="8"/>
+  <text x="130" y="150" text-anchor="middle" font-size="12" font-weight="700" fill="#1d4ed8">Platform team</text>
+  <text x="130" y="170" text-anchor="middle" font-size="9" fill="#1e40af">1 cải tiến deploy</text>
+  <text x="130" y="184" text-anchor="middle" font-size="9" fill="#1e40af">1 cải tiến observability</text>
+  <text x="130" y="198" text-anchor="middle" font-size="9" fill="#1e40af">1 nâng cấp bảo mật</text>
+
+  <!-- arrows to product teams -->
+  <line x1="220" y1="135" x2="470" y2="70" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="220" y1="155" x2="470" y2="130" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="220" y1="175" x2="470" y2="190" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar)"/>
+  <line x1="220" y1="195" x2="470" y2="250" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ar)"/>
+
+  <!-- product teams -->
+  <rect x="476" y="52" width="200" height="36" fill="#dcfce7" stroke="#16a34a" rx="6"/>
+  <text x="576" y="75" text-anchor="middle" font-size="10" fill="#15803d">Đội sản phẩm A — release nhanh hơn</text>
+  <rect x="476" y="112" width="200" height="36" fill="#dcfce7" stroke="#16a34a" rx="6"/>
+  <text x="576" y="135" text-anchor="middle" font-size="10" fill="#15803d">Đội sản phẩm B — app mạnh hơn</text>
+  <rect x="476" y="172" width="200" height="36" fill="#dcfce7" stroke="#16a34a" rx="6"/>
+  <text x="576" y="195" text-anchor="middle" font-size="10" fill="#15803d">Đội sản phẩm C — được bảo vệ</text>
+  <rect x="476" y="232" width="200" height="36" fill="#dcfce7" stroke="#16a34a" rx="6"/>
+  <text x="576" y="255" text-anchor="middle" font-size="10" fill="#15803d">Đội sản phẩm D … mọi đội</text>
+
+  <!-- footer banner -->
+  <rect x="40" y="284" width="636" height="30" fill="#1d4ed8" rx="6"/>
+  <text x="358" y="304" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">Chuyên môn cộng dồn thay vì phân mảnh — một cải tiến lan ra toàn tổ chức</text>
+</svg>

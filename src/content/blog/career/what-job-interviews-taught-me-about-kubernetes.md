@@ -1,7 +1,7 @@
 ---
 title: "Những buổi phỏng vấn đã dạy tôi điều gì về Kubernetes"
 description: "Sau hơn chục buổi phỏng vấn, tôi nhận ra hầu như công ty nào cũng dùng Kubernetes — kể cả startup 10 người không có vấn đề về scale. Bài này phân tích vì sao, với tình huống minh họa cụ thể cho từng lý do, và khi nào bạn thực sự KHÔNG nên dùng K8s."
-pubDate: 2026-06-22
+pubDate: 2026-06-22T09:00:00+07:00
 category: Career
 tags: ["kubernetes", "career", "gitops", "devops", "platform-engineering"]
 ---
