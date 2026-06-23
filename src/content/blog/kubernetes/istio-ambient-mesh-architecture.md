@@ -147,9 +147,9 @@ Với cluster **10.000 pod / 50 namespace / 100 node**:
 
 Ambient không phải "bữa trưa miễn phí". Trước khi migrate, hãy cân nhắc:
 
-- **Debug khó hơn vì HBONE.** Traffic east-west được bọc trong HBONE tunnel (mTLS, port 15008). `tcpdump` trên dây chỉ thấy gói đã mã hoá, không thấy HTTP của ứng dụng. Bạn buộc phải dựa vào `istioctl zc workloads/services`, ztunnel access log và config dump — khác hẳn thói quen debug sidecar. Thêm nữa, một ztunnel phục vụ **mọi pod trên node**, nên log của nó trộn lẫn traffic của nhiều workload, khó cô lập.
+- **Debug khó hơn vì HBONE.** Traffic east-west được bọc trong HBONE tunnel (mTLS, port 15008). `tcpdump` trên dây chỉ thấy gói đã mã hóa, không thấy HTTP của ứng dụng. Bạn buộc phải dựa vào `istioctl zc workloads/services`, ztunnel access log và config dump — khác hẳn thói quen debug sidecar. Thêm nữa, một ztunnel phục vụ **mọi pod trên node**, nên log của nó trộn lẫn traffic của nhiều workload, khó cô lập.
 
-- **Mô hình shared-node giảm mức cô lập so với sidecar.** Với sidecar, mỗi proxy chỉ giữ identity/khoá mTLS của *đúng một* workload — blast radius khi một proxy bị xâm nhập là tối thiểu. Với ambient, ztunnel là tiến trình per-node xử lý traffic và identity cho **tất cả** pod trên node đó; nếu ztunnel bị compromise, phạm vi ảnh hưởng rộng hơn. Trong môi trường multi-tenant đòi hỏi cô lập mạnh, đây là điểm cần đánh giá kỹ.
+- **Mô hình shared-node giảm mức cô lập so với sidecar.** Với sidecar, mỗi proxy chỉ giữ identity/khóa mTLS của *đúng một* workload — blast radius khi một proxy bị xâm nhập là tối thiểu. Với ambient, ztunnel là tiến trình per-node xử lý traffic và identity cho **tất cả** pod trên node đó; nếu ztunnel bị compromise, phạm vi ảnh hưởng rộng hơn. Trong môi trường multi-tenant đòi hỏi cô lập mạnh, đây là điểm cần đánh giá kỹ.
 
 - **L7 cần thêm một hop.** Ztunnel chỉ làm L4. Khi cần policy L7 chi tiết, traffic phải vòng qua waypoint (hai HBONE tunnel) — thêm latency và thêm một thành phần phải vận hành/scale.
 

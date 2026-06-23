@@ -8,9 +8,9 @@ tags: ["kubernetes", "career", "gitops", "devops", "platform-engineering"]
 
 > Đây là phiên bản viết lại và mở rộng (kèm tình huống minh họa) từ bài luận gốc của notnotp.com. Quan điểm trong bài là góc nhìn tổ chức — vì sao công ty *chọn* Kubernetes — chứ không phải hướng dẫn kỹ thuật.
 
-Gần đây tôi đi tìm việc: đọc job posting, phỏng vấn, nói chuyện với đội kỹ thuật của khoảng hơn chục công ty. Và tôi nhận ra một điều khác hẳn so với lần tìm việc cách đây năm năm: **gần như công ty nào cũng đang chạy trên Kubernetes.** Không sót một chỗ nào.
+Gần đây tôi đi tìm việc: đọc job posting, phỏng vấn, nói chuyện với đội kỹ thuật của khoảng hơn chục công ty. Và tôi nhận ra một điều khác hẳn so với lần tìm việc cách đây 5 năm: **gần như công ty nào cũng đang chạy trên Kubernetes.** Không sót một chỗ nào.
 
-Lần trước thì không như vậy. Hồi đó thị trường chia làm ba phe rõ rệt:
+Lần trước thì không như vậy. Hồi đó thị trường chia làm 3 phe rõ rệt:
 
 - Nhóm hiếm hoi đã adopt Kubernetes sớm.
 - Nhóm đông đảo chạy `systemd` trên VM/VPS/EC2.
@@ -24,20 +24,20 @@ Câu trả lời bất ngờ: **họ không quan tâm nhiều đến khía cạn
 
 ## Tại sao? Hỏi thẳng CTO trong buổi phỏng vấn
 
-Phỏng vấn kỹ thuật hoá ra là nơi lý tưởng để hỏi "tại sao", nhất là khi bạn ngồi đối diện trực tiếp với CTO. Và câu trả lời ở các nơi gần như giống hệt nhau, gói gọn trong ba điều dưới đây.
+Phỏng vấn kỹ thuật hóa ra là nơi lý tưởng để hỏi "tại sao", nhất là khi bạn ngồi đối diện trực tiếp với CTO. Và câu trả lời ở các nơi gần như giống hệt nhau, gói gọn trong ba điều dưới đây.
 
 ### 1. Tính đồng nhất (Uniformity)
 
-Lý do đầu tiên: **mọi service deploy theo cùng một cách.** Không còn cảnh service thanh toán âm thầm chạy trên một con VM trần với cái script bash "thần thánh" từ 2019, trong khi API thì nằm trên Docker Compose vì chẳng ai dám đụng vào. Một cách deploy duy nhất, áp dụng cho tất cả.
+Lý do đầu tiên: **mọi service deploy theo cùng một cách.** Không còn cảnh service *payment* âm thầm chạy trên một con VM trần với cái script bash "thần thánh" từ 2019, trong khi API thì nằm trên Docker Compose vì chẳng ai dám đụng vào. Một cách deploy duy nhất, áp dụng cho tất cả.
 
 > **Tình huống minh họa.** Công ty B có 4 service: `api`, `payment`, `worker`, `cron-billing`. Trước khi lên K8s, mỗi service được "ai dựng nấy chịu":
 > - `api` deploy bằng `git pull && pm2 restart` qua SSH.
 > - `payment` chạy `systemd` trên một con EC2 riêng, biến môi trường nhét trong `/etc/payment.env` mà chỉ một anh đã nghỉ việc biết.
 > - `worker` thì... chạy trong một `screen` session, ai cũng sợ reboot máy.
 >
-> Sau khi chuẩn hoá về K8s, cả 4 service đều là một `Deployment` + `Service` mô tả trong YAML, biến môi trường nằm trong `ConfigMap`/`Secret`, deploy bằng đúng một lệnh `helm upgrade`. Người mới vào nhìn 4 thư mục chart giống hệt nhau về cấu trúc — không còn "ngoại lệ bí ẩn" nào để mà sợ.
+> Sau khi chuẩn hóa về K8s, cả 4 service đều là một `Deployment` + `Service` mô tả trong YAML, biến môi trường nằm trong `ConfigMap`/`Secret`, deploy bằng đúng một lệnh `helm upgrade`. Người mới vào nhìn 4 thư mục chart giống hệt nhau về cấu trúc — không còn "ngoại lệ bí ẩn" nào để mà sợ.
 
-### 2. Kiến thức được chuẩn hoá và có thể tuyển được
+### 2. Kiến thức được chuẩn hóa và có thể tuyển được
 
 Lý do thứ hai: **kiến thức dùng chung, tuyển được trên thị trường.** Kubernetes giờ gần như là một thứ "tiếng phổ thông". Ngày đầu đi làm ở công ty hiện tại, tôi mở repo chứa Helm charts và Kube config, và trong vòng một tiếng tôi đã nắm được bức tranh tổng thể của cả kiến trúc. Kiến thức nằm trong YAML, không bị kẹt trong đầu một người nào đó. Mất một người, người thay thế không phải mất ba tuần lục tài liệu để hiểu mọi thứ chạy thế nào.
 
@@ -72,9 +72,9 @@ Lý do thứ ba: **khả năng truy vết — và đi kèm là compliance.** Ở
 
 Các CTO tôi nói chuyện không hề lựa chọn ngu ngốc. Họ đang giải quyết những vấn đề có thật.
 
-Trước đây tôi chỉ nhìn K8s ở khía cạnh kỹ thuật — với tôi nó luôn là một giải pháp kỹ thuật cho vấn đề kỹ thuật. Nhưng hoá ra rất nhiều CTO quan tâm trước hết đến **lợi ích phi kỹ thuật** — nhiều hơn tôi tưởng. Vấn đề kỹ thuật của họ đơn giản không đòi hỏi K8s. Tôi cá là bạn sẽ không tìm thấy [topologySpreadConstraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) trong manifest của họ — họ chẳng quan tâm. Không HPA, không Pod Disruption Budget, không node affinity. Số node họ chạy cũng đúng bằng số VM họ sẽ dùng nếu không có K8s. Nhưng họ **chấp nhận trả giá bằng việc vận hành một phần mềm phức tạp để đổi lấy lợi ích tổ chức.**
+Trước đây tôi chỉ nhìn K8s ở khía cạnh kỹ thuật — với tôi nó luôn là một giải pháp kỹ thuật cho vấn đề kỹ thuật. Nhưng hóa ra rất nhiều CTO quan tâm trước hết đến **lợi ích phi kỹ thuật** — nhiều hơn tôi tưởng. Vấn đề kỹ thuật của họ đơn giản không đòi hỏi K8s. Tôi cá là bạn sẽ không tìm thấy [topologySpreadConstraints](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/) trong manifest của họ — họ chẳng quan tâm. Không HPA, không Pod Disruption Budget, không node affinity. Số node họ chạy cũng đúng bằng số VM họ sẽ dùng nếu không có K8s. Nhưng họ **chấp nhận trả giá bằng việc vận hành một phần mềm phức tạp để đổi lấy lợi ích tổ chức.**
 
-> **Tình huống minh họa.** Startup C có đúng một stateless service và một database. Họ vẫn dựng EKS. Manifest của họ chỉ vỏn vẹn: một `Deployment` `replicas: 2`, một `Service`, một `Ingress`. Không autoscaling, không gì cao siêu. Một kỹ sư hỏi: "Hai con VM với một load balancer là xong, sao phải EKS?" CTO trả lời: "Vì sáu tháng nữa tôi sẽ tuyển thêm 3 kỹ sư, và tôi không muốn dành tuần đầu của mỗi người để giải thích server của chúng ta hoạt động ra sao." Họ mua **sự đồng nhất cho tương lai**, không phải sức mạnh kỹ thuật cho hiện tại.
+> **Tình huống minh họa.** Startup C có đúng một stateless service và một database. Họ vẫn dựng EKS. Manifest của họ chỉ vỏn vẹn: một `Deployment` `replicas: 2`, một `Service`, một `Gateway` và một `HTTPRoute`. Không autoscaling, không gì cao siêu. Một kỹ sư hỏi: "Hai con VM với một load balancer là xong, sao phải EKS?" CTO trả lời: "Vì sáu tháng nữa tôi sẽ tuyển thêm 3 kỹ sư, và tôi không muốn dành tuần đầu của mỗi người để giải thích server của chúng ta hoạt động ra sao." Họ mua **sự đồng nhất cho tương lai**, không phải sức mạnh kỹ thuật cho hiện tại.
 
 Thành thật mà nói, tôi nghĩ phần lớn là ổn. Nhưng tôi vẫn cho rằng đa số công ty nên **bắt đầu mà không có K8s.** Cluster thực sự khó debug khi có sự cố, và ở giai đoạn đầu bạn muốn dồn năng lượng cho sản phẩm, không phải hạ tầng. Khi bạn còn đang pitch cho khách hàng lớn tiếp theo, việc dựng một con VPS và `git pull` bẩn một phát là một bản vá khẩn cấp hoàn toàn hợp lệ. Chưa tối ưu, đúng. Nhưng nhanh, và bạn biết chính xác chuyện gì đang diễn ra. Bạn thật sự không muốn ngồi hai tiếng tìm hiểu vì sao cái pod kẹt ở `CrashLoopBackOff` ngay trước một cuộc gọi với khách hàng.
 
@@ -86,12 +86,12 @@ Thành thật mà nói, tôi nghĩ phần lớn là ổn. Nhưng tôi vẫn cho 
 
 ## Vì sao bước ngoặt lại diễn ra gần đây?
 
-Tôi vẫn chưa hiểu hẳn vì sao cú dịch chuyển lại xảy ra đúng vào lúc này. Năm năm trước cả ba phe đều sống khoẻ. Giờ thì phe VM+`systemd` gần như biến mất khỏi các tin tuyển dụng, serverless vẫn ở thị trường ngách, còn K8s thì thắng tuyệt đối.
+Tôi vẫn chưa hiểu hẳn vì sao cú dịch chuyển lại xảy ra đúng vào lúc này. 5 năm trước cả 3 phe đều sống khỏe. Giờ thì phe `VM` +`systemd` gần như biến mất khỏi các tin tuyển dụng, serverless vẫn ở thị trường ngách, còn `K8s` thì thắng tuyệt đối.
 
 Phỏng đoán của tôi:
 
 - **Managed Kubernetes trưởng thành.** EKS, GKE, AKS đã đủ ổn định để bạn không phải tự vận hành control plane.
-- **Pool nhân lực đã lật ngược.** Đủ nhiều người học K8s đến mức tuyển cho *bất cứ thứ gì khác* lại trở thành lựa chọn khó hơn.
+- **Lợi thế nhân lực đã đảo chiều.** K8s trở thành tiêu chuẩn mặc định, khiến việc tìm kiếm kỹ sư cho các kiến trúc phi-K8s trở nên khó khăn và đắt đỏ hơn.
 - **Helm biến "dùng chart của người khác" thành lựa chọn thực tế.**
 
 > **Tình huống minh họa.** Công ty cần dựng Redis, Postgres, và một message queue. Năm 2020: ba lần đọc tài liệu, ba kiểu cài `systemd`, tự lo backup và HA. Năm 2026: ba lệnh.
@@ -102,13 +102,12 @@ Phỏng đoán của tôi:
 > ```
 > Khi rào cản dựng hạ tầng tụt xuống mức này, lý do để *không* dùng K8s cũng mỏng đi theo.
 
-Nhưng tôi không chắc. Nếu bạn từng chứng kiến cú dịch chuyển này và có lý thuyết tốt hơn, tôi rất muốn nghe.
-
 ---
 
 ## Vậy khi nào nên dùng Kubernetes?
 
-Ngưỡng cá nhân của tôi: **thời điểm CTO không còn là kỹ sư duy nhất nữa.** Ngay khi người thứ hai xuất hiện, những vấn đề mà K8s giải quyết trở thành có thật:
+
+Ranh giới chuyển đổi của tôi rất rõ ràng: đó là khi **CTO không còn là một 'one-man show'**. Ngay khoảnh khắc kỹ sư thứ hai bước vào đội ngũ, những bài toán mà K8s sinh ra để giải quyết mới thực sự hiện hình:
 
 - Giờ có một người *không* dựng server nhưng *cần* deploy.
 - Có người cần access control đàng hoàng, chứ không phải SSH key cho mọi thứ.
@@ -117,7 +116,7 @@ Ngưỡng cá nhân của tôi: **thời điểm CTO không còn là kỹ sư du
 Đó là lúc bạn muốn **hệ thống giữ kiến thức, chứ không phải con người giữ kiến thức.**
 
 > **Tình huống minh họa — bài test ngược.** Hỏi: "Nếu người duy nhất biết hệ thống chạy thế nào nghỉ việc ngày mai, công ty có deploy được bản vá khẩn không?"
-> - Nếu câu trả lời là "không" hoặc "phải đợi người đó trả lời tin nhắn" → bạn đã đến ngưỡng cần một hệ thống chuẩn hoá (K8s hoặc tương đương).
+> - Nếu câu trả lời là "không" hoặc "phải đợi người đó trả lời tin nhắn" → bạn đã đến ngưỡng cần một hệ thống chuẩn hóa (K8s hoặc tương đương).
 > - Nếu vẫn là "có, mọi thứ trong git và ai cũng deploy được" → bạn chưa cần vội.
 
 ---
@@ -126,7 +125,7 @@ Ngưỡng cá nhân của tôi: **thời điểm CTO không còn là kỹ sư du
 
 Kubernetes thắng không hẳn vì nó là giải pháp kỹ thuật xuất sắc cho mọi quy mô — mà vì nó giải được ba bài toán *tổ chức*: đồng nhất cách làm việc, biến kiến thức thành thứ tuyển được, và để lại dấu vết cho mọi thay đổi. Đó là lý do cả những công ty không cần đến sức mạnh kỹ thuật của nó vẫn chọn nó.
 
-Nhưng "ai cũng dùng" không có nghĩa "bạn phải dùng ngay từ ngày đầu". Hãy bắt đầu đơn giản, và lên K8s khi nỗi đau tổ chức — chứ không phải nỗi đau kỹ thuật — bắt đầu xuất hiện.
+Nhưng "ai cũng dùng" không có nghĩa "bạn phải dùng ngay từ ngày đầu". Hãy bắt đầu đơn giản, và lên K8s khi nỗi đau tổ chức bắt đầu xuất hiện (chứ không phải nỗi đau kỹ thuật) 
 
 ---
 

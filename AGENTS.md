@@ -84,13 +84,14 @@ draft: false                         # boolean, tùy chọn (mặc định false
 Đây là phần QUAN TRỌNG NHẤT để giữ blog nhất quán.
 
 1. **Ngôn ngữ: tiếng Việt + giữ nguyên thuật ngữ kỹ thuật tiếng Anh.** Không dịch cứng các thuật ngữ phổ biến (deploy, pipeline, sidecar, uptime, change failure rate, observability...). Viết tự nhiên như một kỹ sư Việt nói chuyện.
-2. **Giọng văn:** trực tiếp, gọn, thực tế. Tránh sáo rỗng, tránh marketing. Ưu tiên "show, don't tell".
-3. **Mở đầu bằng một callout `>`** tóm tắt ý chính hoặc bối cảnh (xem các bài hiện có). Sau đó vào thẳng vấn đề.
-4. **Cấu trúc bằng heading `##` / `###`**, chia mục rõ ràng. Dùng `---` để ngăn các phần lớn.
-5. **Mỗi phần nên có ví dụ/tình huống minh họa cụ thể.** Quy ước đang dùng: một block `> **Tình huống minh họa.** ...` với kịch bản thực tế (lệnh, con số, before/after). Đây là chữ ký nội dung của blog — hãy duy trì.
-6. **Code block** có chỉ định ngôn ngữ (```bash, ```yaml, ```ts...). Lệnh và config phải chạy được/đúng thực tế.
-7. **Bảng** cho so sánh, **danh sách** cho liệt kê.
-8. **Độ chính xác kỹ thuật là trên hết.** Nếu là số liệu ước lượng, nói rõ là ước lượng và nêu giả định (xem ghi chú trong bài Istio).
+2. **Chính tả tiếng Việt: dùng kiểu đặt dấu thanh TRUYỀN THỐNG (kiểu cũ).** Đặt dấu thanh trên nguyên âm đầu của nguyên âm đôi/ba mở. Viết đúng: **hóa, thỏa, khỏe, hòa, lòa, túy, thúy, quý** — KHÔNG dùng kiểu mới (hoá, thoả, khoẻ, hoà, loà, tuý, thuý, quí). Áp dụng cho toàn bộ nội dung bài viết và metadata (title, description).
+3. **Giọng văn:** trực tiếp, gọn, thực tế. Tránh sáo rỗng, tránh marketing. Ưu tiên "show, don't tell".
+4. **Mở đầu bằng một callout `>`** tóm tắt ý chính hoặc bối cảnh (xem các bài hiện có). Sau đó vào thẳng vấn đề.
+5. **Cấu trúc bằng heading `##` / `###`**, chia mục rõ ràng. Dùng `---` để ngăn các phần lớn.
+6. **Mỗi phần nên có ví dụ/tình huống minh họa cụ thể.** Quy ước đang dùng: một block `> **Tình huống minh họa.** ...` với kịch bản thực tế (lệnh, con số, before/after). Đây là chữ ký nội dung của blog — hãy duy trì.
+7. **Code block** có chỉ định ngôn ngữ (```bash, ```yaml, ```ts...). Lệnh và config phải chạy được/đúng thực tế.
+8. **Bảng** cho so sánh, **danh sách** cho liệt kê.
+9. **Độ chính xác kỹ thuật là trên hết.** Nếu là số liệu ước lượng, nói rõ là ước lượng và nêu giả định (xem ghi chú trong bài Istio).
 
 ---
 
@@ -135,13 +136,13 @@ Mọi commit dùng [Conventional Commits](https://www.conventionalcommits.org/),
 
 | type | Dùng khi | Ví dụ |
 |---|---|---|
-| `post` | Thêm **bài viết mới** | `post(platform): them bai 15 best practice platform engineering` |
-| `content` | Sửa/cập nhật bài đã có | `content(kubernetes): cap nhat so lieu benchmark istio` |
-| `feat` | Thêm tính năng cho site | `feat(tags): them trang loc bai theo tag` |
-| `fix` | Sửa bug | `fix(nav): can chinh lai link tags bi lech` |
-| `style` | Đổi CSS/giao diện, không đổi logic | `style(nav): doi mau hover cho tag badge` |
-| `docs` | Sửa tài liệu (README, AGENTS.md) | `docs: bo sung quy uoc commit` |
-| `chore` | Cấu hình, dependency, CI | `chore: nang astro len 4.16` |
+| `post` | Thêm **bài viết mới** | `post(platform): add 15 platform engineering best practices` |
+| `content` | Sửa/cập nhật bài đã có | `content(kubernetes): update istio benchmark numbers` |
+| `feat` | Thêm tính năng cho site | `feat(tags): add tag filter pages and tag cloud` |
+| `fix` | Sửa bug | `fix(nav): correct misaligned tags link` |
+| `style` | Đổi CSS/giao diện, không đổi logic | `style(nav): adjust tag badge hover color` |
+| `docs` | Sửa tài liệu (README, AGENTS.md) | `docs: add commit conventions` |
+| `chore` | Cấu hình, dependency, CI | `chore: bump astro to 4.16` |
 
 ### Quy tắc commit cho AI Agent
 
@@ -151,7 +152,7 @@ Mọi commit dùng [Conventional Commits](https://www.conventionalcommits.org/),
 - **LUÔN chạy `npm run build` pass trước khi commit.**
 - Không commit `dist/`, `node_modules/`, `.astro/` (đã có trong `.gitignore`).
 - Không `git push` thẳng lên `main` trừ khi user yêu cầu — push lên `main` sẽ trigger deploy production.
-- Tiêu đề commit viết tiếng Việt không dấu hoặc tiếng Anh đều được, miễn nhất quán và ngắn gọn.
+- **Tiêu đề commit viết bằng tiếng Anh** (mệnh lệnh, thì hiện tại, viết thường, ≤70 ký tự).
 
 ---
 
