@@ -57,7 +57,31 @@ const siteTitle = title === 'ltthang88' ? title : `${title} · ltthang88`;
       <slot />
     </main>
     <footer>
-      <p>© {new Date().getFullYear()} ltthang88 · Built with <a href="https://astro.build">Astro</a></p>
+      <div class="footer-inner">
+        <div class="footer-prompt">
+          <span class="prompt-path">~/field-notes</span>
+          <span class="prompt-dollar">$</span>
+          <nav class="prompt-topics">
+            <a href="/category/kubernetes">kubernetes</a>
+            <span class="prompt-sep">·</span>
+            <a href="/category/ci-cd">ci/cd</a>
+            <span class="prompt-sep">·</span>
+            <a href="/category/observability">observability</a>
+            <span class="prompt-sep">·</span>
+            <a href="/category/platform">platform</a>
+            <span class="prompt-sep">·</span>
+            <a href="/category/security">security</a>
+            <span class="prompt-sep">·</span>
+            <a href="/category/career">career</a>
+          </nav>
+        </div>
+        <div class="footer-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="status-label">operational</span>
+          <a href="https://github.com/ltthang88" target="_blank" rel="noopener" class="footer-gh">github ↗</a>
+          <span class="footer-year">{new Date().getFullYear()}</span>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
