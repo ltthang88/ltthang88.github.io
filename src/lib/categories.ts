@@ -6,6 +6,7 @@ export const CATEGORIES = [
   'Security',
   'Observability',
   'Platform',
+  'AI Engineering',
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];
@@ -29,4 +30,5 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   Security: '#dc2626',
   Observability: '#0891b2',
   Platform: '#d97706',
+  'AI Engineering': '#4f46e5',
 };
