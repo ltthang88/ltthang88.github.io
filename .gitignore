@@ -2,6 +2,9 @@
 dist/
 .output/
 
+# generated Pagefind index copied into public/ for dev search
+public/pagefind/
+
 # generated types
 .astro/
 

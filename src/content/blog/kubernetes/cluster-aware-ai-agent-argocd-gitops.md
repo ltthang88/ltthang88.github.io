@@ -18,9 +18,9 @@ Một Large Language Model trả lời thuần từ dữ liệu nó được tra
 
 <img src="https://www.cncf.io/wp-content/uploads/2026/06/image-5-1-1800x1124.jpg" alt="So sánh LLM đơn thuần và AI agent: agent quan sát state thật trước khi suy luận" loading="lazy" />
 
-Khác biệt lộ rõ ngay trong output. Hỏi một LLM thường về `CrashLoopBackOff`, bạn nhận một câu trả lời đúng nhưng chung chung — đại loại "thường là container fail health check hoặc thoát bất thường". Hỏi agent, bạn nhận một câu trả lời *neo vào cluster của bạn*: pod `api-7b8d` đã restart 14 lần trong một giờ qua vì `ImagePullBackOff` với `registry.local`, và đây là lệnh `kubectl describe` để xác nhận. Câu đầu đúng nhưng không hành động được; câu sau hành động được ngay.
+Khác biệt lộ rõ ngay trong output. Hỏi một LLM thường về `CrashLoopBackOff`, bạn nhận một câu trả lời đúng nhưng chung chung — đại loại "thường là container fail health check hoặc thoát bất thường". Hỏi agent, bạn nhận một câu trả lời *neo vào cluster của bạn*: pod `api-7b8d` đã restart 14 lần trong một giờ qua vì `ImagePullBackOff` với `registry.local`, và đây là lệnh `kubectl describe` để xác nhận. Câu đầu đúng nhưng chẳng giúp bạn làm gì với cluster này; câu sau thì làm theo được ngay.
 
-Trong project demo, hai chế độ này được phơi ra qua hai REST endpoint: `POST /ask` là LLM đơn thuần — hợp cho câu hỏi chung kiểu "StatefulSet là gì"; còn `POST /diagnose` mới là agent — đọc state sống rồi suy luận trên đó. Cùng một model, khác nhau ở chỗ có quan sát thực tế trước khi mở miệng hay không.
+Trong project demo, hai chế độ này được phơi ra qua hai REST endpoint: `POST /ask` là LLM đơn thuần — hợp cho câu hỏi chung kiểu "StatefulSet là gì"; còn `POST /diagnose` mới là agent — đọc state sống rồi suy luận trên đó. Cùng một model, khác nhau ở chỗ nó có nhìn vào thực tế trước khi mở miệng hay không.
 
 ---
 

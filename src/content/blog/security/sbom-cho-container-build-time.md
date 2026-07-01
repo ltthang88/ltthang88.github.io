@@ -6,7 +6,7 @@ category: Security
 tags: ["sbom", "supply-chain", "container-security", "ci-cd", "devsecops"]
 ---
 
-> Sinh một SBOM thì dễ. Sinh một SBOM *dùng được* mới khó. Định dạng file đã chuẩn hóa, nhưng chất lượng nội dung thì dao động dữ dội tùy vào cách và thời điểm bạn sinh ra nó. Theo báo cáo supply-chain 2026 của Omdia mà Docker dẫn, phần lớn tổ chức thấy việc sinh SBOM khó — và nguyên nhân lớn là tool sprawl: mỗi loại artifact một scanner, output không nhất quán giữa các pipeline, kỹ sư tốn thời gian đối chiếu kết quả thay vì hành động trên chúng.
+> Sinh một SBOM thì dễ. Sinh một SBOM *dùng được* mới khó. Định dạng file đã chuẩn hóa, nhưng chất lượng nội dung thì dao động dữ dội tùy vào cách và thời điểm bạn sinh ra nó. Theo báo cáo supply-chain 2026 của Omdia mà Docker dẫn, phần lớn tổ chức thấy việc sinh SBOM khó — và nguyên nhân lớn là tool sprawl: mỗi loại artifact một scanner, output không nhất quán giữa các pipeline, kỹ sư tốn thời gian đối chiếu kết quả thay vì bắt tay xử lý chúng.
 
 SBOM giờ là thứ chịu tải: security team dựa vào nó để phản ứng với một CVE mới, compliance team dùng nó để qua audit, và quyết định procurement cũng nhìn vào nó. Mà khi bước sinh SBOM mang tính chịu tải như vậy, thì mọi khiếm khuyết ở đó đều chảy xuống dưới. Nếu SBOM pipeline của bạn bỏ sót transitive dependency, ghi version khai báo thay vì version thực sự cài, hoặc không được buộc bằng chữ ký vào đúng artifact nó mô tả — thì mọi quyết định downstream xây trên dữ liệu đó đều thừa hưởng lỗ hổng. Bài này mình viết lại từ một bài hướng dẫn của Docker, theo mạch riêng và thêm góc nhìn cho bối cảnh regulated.
 

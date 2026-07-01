@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import Pagination from '../components/Pagination.astro';
+import { CATEGORIES, categoryToSlug, CATEGORY_COLORS } from '../lib/categories';
+
+export async function getStaticPaths({ paginate }: { paginate: Function }) {
+  const PAGE_SIZE = 10;
+  const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+  // Per-category counts for the stat cards (same on every page)
+  const counts = Object.fromEntries(
+    CATEGORIES.map((cat) => [cat, allPosts.filter((p) => p.data.category === cat).length])
+  );
+
+  return paginate(allPosts, { pageSize: PAGE_SIZE, props: { counts } });
+}
+
+interface Props {
+  page: {
+    data: Awaited<ReturnType<typeof getCollection<'blog'>>>;
+    currentPage: number;
+    lastPage: number;
+    total: number;
+  };
+  counts: Record<string, number>;
+}
+
+const { page, counts } = Astro.props;
+const isFirstPage = page.currentPage === 1;
+---
+
+<Base title={isFirstPage ? 'ltthang88' : `ltthang88 · trang ${page.currentPage}`}>
+  <div class="page-container">
+    {isFirstPage && (
+      <!-- Hero -->
+      <section class="hero" style="margin-bottom:3rem">
+        <div class="hero-prompt">
+          <span class="hero-dollar">$</span>
+          <span class="hero-cmd">kubectl</span>
+          <span class="hero-subcmd">get notes</span>
+          <span class="hero-flag">--namespace=<span class="hero-ns">platform-engineering</span></span>
+          <span class="hero-cursor" aria-hidden="true">▋</span>
+        </div>
+        <hr class="hero-rule" />
+        <p class="hero-desc">
+          Platform engineering field notes — Kubernetes, Platform, CI/CD, Networking, Observability, Security, AI Engineering và hành trình career trong ngành tech.
+        </p>
+
+        <!-- Category quick-links -->
+        <div style="display:flex;flex-wrap:wrap;gap:.625rem">
+          {CATEGORIES.map((cat) => (
+            <a
+              href={`/category/${categoryToSlug(cat)}/`}
+              style={`
+                display:inline-flex;align-items:center;gap:.4rem;
+                padding:.25rem .875rem;border-radius:var(--radius);
+                font-family:var(--font-mono);
+                font-size:.8125rem;font-weight:600;color:#fff;
+                background:${CATEGORY_COLORS[cat]};
+                text-decoration:none;opacity:.9;
+                transition:opacity .15s;
+              `}
+              onmouseover="this.style.opacity=1"
+              onmouseout="this.style.opacity=.9"
+            >
+              {cat}
+              <span style="opacity:.8;font-weight:400">{counts[cat]}</span>
+            </a>
+          ))}
+          <a href="/search/" style="
+            display:inline-flex;align-items:center;gap:.4rem;
+            padding:.25rem .875rem;border-radius:var(--radius);
+            font-family:var(--font-mono);
+            font-size:.8125rem;font-weight:500;
+            border:1px solid var(--border);color:var(--text-muted);
+            text-decoration:none;transition:border-color .15s,color .15s;
+          ">
+            🔍 Search
+          </a>
+        </div>
+      </section>
+    )}
+
+    <!-- Post list -->
+    <section>
+      <h2 style="font-size:1rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:1.25rem">
+        {isFirstPage ? 'Bài mới nhất' : `Bài viết · trang ${page.currentPage}/${page.lastPage}`}
+      </h2>
+
+      {page.data.length > 0
+        ? (
+          <div class="post-grid">
+            {page.data.map((post) => <PostCard post={post} />)}
+          </div>
+        )
+        : <p style="color:var(--text-muted)">Chưa có bài viết nào. Hãy thêm file .md vào <code>src/content/blog/</code>!</p>
+      }
+
+      <Pagination currentPage={page.currentPage} lastPage={page.lastPage} urlBase="" />
+    </section>
+  </div>
+</Base>
